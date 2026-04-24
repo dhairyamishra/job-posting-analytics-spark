@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Spark / Hive / Derby runtime artifacts
+derby.log
+metastore_db/
+spark-warehouse/
+*.crc
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large source data files (exceed GitHub's 100MB limit)
+# postings.csv is ~493MB — keep locally, do not commit
+data/linkedin/postings.csv

@@ -1,0 +1,15 @@
+LOAD: q3_1_remote_rate rows=2 cols=['subcohort', 'total_postings', 'remote_postings', 'remote_pct']
+STEP: building Phase 2 charts; sample sizes = {'layoff_affected': 3569, 'non_affected': 118116}
+LOAD: q1_1_median_salary_by_level rows=12 cols=['subcohort', 'experience_level', 'median_salary', 'posting_count']
+SAVE: output/charts/q1_1_median_salary_by_level.png
+LOAD: q1_2_experience_level_distribution rows=12 cols=['subcohort', 'experience_level', 'n', 'pct_of_subcohort']
+SAVE: output/charts/q1_2_experience_level_distribution.png
+LOAD: q2_1_top_skills_by_subcohort rows=20 cols=['subcohort', 'skill_name', 'n', 'pct_of_subcohort']
+SAVE: output/charts/q2_1_top_skills_by_subcohort.png
+LOAD: q2_2_tech_skill_share rows=2 cols=['subcohort', 'total_skill_tags', 'tech_skill_tags', 'tech_pct']
+SAVE: output/charts/q2_2_tech_skill_share.png
+LOAD: q3_1_remote_rate rows=2 cols=['subcohort', 'total_postings', 'remote_postings', 'remote_pct']
+SAVE: output/charts/q3_1_remote_rate.png
+LOAD: q3_2_top_states_by_subcohort rows=20 cols=['subcohort', 'state', 'n', 'pct_of_subcohort']
+SAVE: output/charts/q3_2_top_states_by_subcohort.png
+DONE: all charts regenerated
