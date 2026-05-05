@@ -1,5 +1,7 @@
 # LinkedIn Job Market Analytics — Phase 2 Implementation Plan
 
+> **Status (May 4, 2026): Implemented and verified.** The six core queries (Q1.1-Q3.2) plus the JOLTS add-on (Q4.1, Q4.2) and the chart renderer all ship; Script 04 diagnostic gate passes; the entire Phase 1 + Phase 2 pipeline reproduces in ~6 min via the one-shot in `Readme.md`. The spec below is preserved verbatim as the "locked Phase 2 contract." All amendments since locking (the JOLTS add-on, the eighth chart) are documented in `IMPLEMENTATION_PLAN.md` under "Phase 2 Add-on — Macro Context (BLS JOLTS)." Headline reproduction: layoff cohort 3,569 postings vs non-affected 118,116, Mid-Senior share 66.36% vs 43.25%, tech-skill share 36.39% vs 20.39%, remote rate 20.15% vs 11.87% — bit-equivalent across reruns.
+
 ## Context
 
 Phase 1 is complete. Cleaned parquet datasets exist at:
@@ -30,17 +32,22 @@ Recovers ~3,700 Twitter/X layoffs. Skip all other manual renames.
 ## Folder Additions
 
 ```
-linkedin-spark-project/
+job-posting-analytics-spark/
 ├── scripts/
-│   ├── 04_diagnostic_join_check.py        ← already done
-│   ├── 05_analytics_salary_level.py       ← Angle 1, 2 queries
-│   ├── 06_analytics_skills_pivot.py       ← Angle 2, 2 queries
-│   ├── 07_analytics_geo_remote.py         ← Angle 3, 2 queries
-│   └── 08_make_charts.py                  ← matplotlib only, no Spark
+│   ├── 04_diagnostic_join_check.py        ← Step 0 join hit-rate gate
+│   ├── 05_analytics_salary_level.py       ← Angle 1, 2 queries (Q1.1, Q1.2)
+│   ├── 06_analytics_skills_pivot.py       ← Angle 2, 2 queries (Q2.1, Q2.2)
+│   ├── 07_analytics_geo_remote.py         ← Angle 3, 2 queries (Q3.1, Q3.2)
+│   ├── 08_make_charts.py                  ← matplotlib only, no Spark
+│   ├── 09_profile_and_clean_jolts.py      ← add-on: BLS JOLTS Phase 1 clean
+│   └── 10_analytics_macro_context.py      ← add-on: 2 macro queries (Q4.1, Q4.2)
 └── output/
-    ├── results/                           ← one CSV per query (6 total)
-    └── charts/                            ← one PNG per query (6 total)
+    ├── diagnostics/                       ← Step 0 join_hit_rate CSV
+    ├── results/                           ← one CSV per query (8 total)
+    └── charts/                            ← one PNG per query (8 total)
 ```
+
+> The 09/10 JOLTS add-on and the resulting eighth chart were added after this spec was locked. The two extra queries do not modify any of the six core queries below; they read a fourth Parquet (`output/parquet/jolts/`) produced by Script 09 and write `q4_1_*` and `q4_2_*` CSVs that Script 08 picks up. See `IMPLEMENTATION_PLAN.md` for the add-on description.
 
 ## Common Pattern for Analytics Scripts (05–07)
 
@@ -245,7 +252,11 @@ For each analytics script (05, 06, 07):
 
 For `08_make_charts.py`:
 - Runs as `python scripts/08_make_charts.py` (no Spark needed).
-- Produces 6 PNGs in `output/charts/`.
+- Produces 6 PNGs in `output/charts/` (8 PNGs once the JOLTS add-on Q4.1 + Q4.2 charts are wired in).
+
+For the JOLTS add-on (Scripts 09, 10):
+- 09 follows the same Phase 1 pattern as 01-03: profile + clean + parquet + profile-CSV. Final cleaned Parquet has 1,818 rows = 6 series x 303 months.
+- 10 produces `q4_1_jolts_layoff_rate/` and `q4_2_jolts_openings_hires_rate/` CSVs in `output/results/`.
 
 ## Reporting Stance
 

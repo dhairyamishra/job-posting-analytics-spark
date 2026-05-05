@@ -1,0 +1,16 @@
+dataset,column,metric,value
+layoffs_raw,_dataset,row_count,4357
+layoffs_raw,company,null_count,0
+layoffs_raw,location,null_count,1
+layoffs_raw,total_laid_off,null_count,1509
+layoffs_raw,date,null_count,1
+layoffs_raw,percentage_laid_off,null_count,1617
+layoffs_raw,industry,null_count,2
+layoffs_raw,stage,null_count,5
+layoffs_raw,country,null_count,2
+layoffs_raw,country,distinct_count,67
+layoffs_raw,industry,distinct_count,31
+layoffs_raw,stage,distinct_count,17
+layoffs_clean,_dataset,row_count,3643
+layoffs_clean,_dataset,total_dropped,714
+layoffs_clean,_dataset,dropped_both_laid_off_fields_null,714

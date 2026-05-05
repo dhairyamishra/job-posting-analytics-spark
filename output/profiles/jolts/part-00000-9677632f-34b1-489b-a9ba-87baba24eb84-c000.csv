@@ -1,0 +1,12 @@
+dataset,column,metric,value
+jolts_raw,_dataset,row_count,334524
+jolts_raw,series_id,null_count,0
+jolts_raw,year,null_count,0
+jolts_raw,period,null_count,0
+jolts_raw,value,null_count,0
+jolts_clean,_dataset,dropped_non_target_series,332706
+jolts_clean,_dataset,dropped_period_m13,0
+jolts_clean,industry,distinct_count,2
+jolts_clean,metric,distinct_count,3
+jolts_clean,_dataset,row_count,1818
+jolts_clean,_dataset,total_dropped,332706

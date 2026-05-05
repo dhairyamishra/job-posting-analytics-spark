@@ -12,4 +12,8 @@ LOAD: q3_1_remote_rate rows=2 cols=['subcohort', 'total_postings', 'remote_posti
 SAVE: output/charts/q3_1_remote_rate.png
 LOAD: q3_2_top_states_by_subcohort rows=20 cols=['subcohort', 'state', 'n', 'pct_of_subcohort']
 SAVE: output/charts/q3_2_top_states_by_subcohort.png
+LOAD: q4_1_jolts_layoff_rate rows=606 cols=['obs_date', 'year', 'month', 'industry', 'layoffs_discharges_rate']
+SAVE: output/charts/q4_1_jolts_layoff_rate_timeseries.png
+LOAD: q4_2_jolts_openings_hires_rate rows=606 cols=['obs_date', 'year', 'month', 'industry', 'job_openings_rate', 'hires_rate']
+SAVE: output/charts/q4_2_jolts_openings_vs_hires.png
 DONE: all charts regenerated

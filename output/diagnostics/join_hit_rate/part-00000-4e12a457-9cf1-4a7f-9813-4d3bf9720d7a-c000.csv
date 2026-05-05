@@ -1,8 +1,0 @@
-metric,value
-distinct_layoff_companies,2505
-distinct_posting_companies,24315
-matched_companies,432
-company_hit_rate_pct,17.25
-total_postings,123394
-matched_postings,3569
-posting_share_in_layoff_cohort_pct,2.89

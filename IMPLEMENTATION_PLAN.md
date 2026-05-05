@@ -2,53 +2,80 @@
 
 ## Context
 
-Course project for NYU CSCI-GA.2437 (Big Data Application Development, Spring 2026). Solo team, professor-approved. **Phase 1 (data profiling + cleaning) is due April 24** and is the immediate scope of this plan. Phases 2 and 3 are noted at the end but not implemented here.
+Course project for NYU CSCI-GA.2437 (Big Data Application Development, Spring 2026). Solo team, professor-approved. **Phase 1 (data profiling + cleaning) is due April 24** and is the immediate scope of this plan. Phases 2 and 3 are noted at the end.
+
+**Status snapshot (May 4, 2026):** Phase 1 submitted Apr 24 (`submission/Dhairya_dpm8739_phase1/`). Phase 2 (six analytics queries + chart rendering) and the JOLTS macro add-on (Scripts 09 + 10) are complete and verified end-to-end. Phase 3 (5-8 page report PDF + 10-slide deck) is in progress in `submission/final_submission/`. Top-level project overview, headline numbers, and one-shot Docker run command live in `Readme.md`.
 
 **Constraint:** Use Spark for everything. Keep scope lean — no production polish, no extra features, no unrequested abstractions.
 
 ## Thesis
 
-> Comparing LinkedIn job postings against the 2020–2026 layoffs record, we examine whether layoff-affected companies have resumed hiring at the same scale, level, skill mix, and locations as before — or whether they have structurally shifted what they hire for.
+The original thesis below is the wording recorded at project start. Phase 3 retains it as a historical anchor, but the report and presentation defend a **revised cross-sectional thesis** because the LinkedIn postings dataset is a single 2023-2024 snapshot with no "before" period. The full revision rationale is in `submission/final_submission/appendix/A_thesis_revision_rationale.md`; the deliverable wording the report defends is in `submission/final_submission/FINAL_REPORT.md` Section 1.
+
+> **Original (April 2026):** Comparing LinkedIn job postings against the 2020–2026 layoffs record, we examine whether layoff-affected companies have resumed hiring at the same scale, level, skill mix, and locations as before — or whether they have structurally shifted what they hire for.
 
 ## Datasets
 
 | # | Name | Source | Files used | Size |
 |---|------|--------|------------|------|
 | 1 | LinkedIn Job Postings (2023–2024) | Kaggle: `arshkon/linkedin-job-postings` | `postings.csv`, `mappings/skills.csv`, `jobs/job_skills.csv` | ~1–2 GB total |
-| 2 | Tech Layoffs (2020–present) | Kaggle: `swaptr/layoffs-2022` | `layoffs.csv` | <5 MB, ~2,886 rows |
+| 2 | Tech Layoffs (2020–present) | Kaggle: `swaptr/layoffs-2022` | `layoffs.csv` | <5 MB, ~4.3k rows |
+| 3 | BLS JOLTS time series (Phase 2 add-on) | BLS: `download.bls.gov/pub/time.series/jt/` | `jt.data.2.JobOpenings`, `jt.data.3.Hires`, `jt.data.6.LayoffsDischarges`, `jt.industry` | ~18 MB raw, 1,818 rows after filtering |
 
 `postings.csv` is already the merge of `jobs.csv` + `salaries.csv` with a few enrichments (`company_name`, `normalized_salary`, `zip_code`, `fips`) — do not re-merge those.
 
 ## Folder Structure
 
 ```
-linkedin-spark-project/
+job-posting-analytics-spark/
 ├── data/
 │   ├── linkedin/
 │   │   ├── postings.csv
 │   │   ├── mappings/skills.csv
 │   │   └── jobs/job_skills.csv
-│   └── layoffs/
-│       └── layoffs.csv
+│   ├── layoffs/
+│   │   └── layoffs.csv
+│   └── jolts/
+│       ├── jt.data.2.JobOpenings
+│       ├── jt.data.3.Hires
+│       ├── jt.data.6.LayoffsDischarges
+│       └── jt.industry
 ├── output/
-│   ├── parquet/         # cleaned datasets
-│   ├── profiles/        # CSV summaries of profiling results
-│   └── logs/            # stdout dumps from each run
-└── scripts/
-    ├── 01_profile_and_clean_postings.py
-    ├── 02_profile_and_clean_skills.py
-    └── 03_profile_and_clean_layoffs.py
+│   ├── parquet/                 # 4 cleaned datasets
+│   ├── profiles/                # long-form profile CSVs
+│   ├── diagnostics/             # Step 0 join hit-rate summary
+│   ├── results/                 # 8 query result CSVs (q1_1 ... q4_2)
+│   ├── charts/                  # 8 PNGs
+│   └── logs/                    # one .log per script
+├── scripts/
+│   ├── 01_profile_and_clean_postings.py        # Phase 1
+│   ├── 02_profile_and_clean_skills.py          # Phase 1
+│   ├── 03_profile_and_clean_layoffs.py         # Phase 1
+│   ├── 04_diagnostic_join_check.py             # Phase 2 Step 0
+│   ├── 05_analytics_salary_level.py            # Phase 2 Angle 1
+│   ├── 06_analytics_skills_pivot.py            # Phase 2 Angle 2
+│   ├── 07_analytics_geo_remote.py              # Phase 2 Angle 3
+│   ├── 08_make_charts.py                       # pandas + matplotlib
+│   ├── 09_profile_and_clean_jolts.py           # Phase 2 add-on
+│   └── 10_analytics_macro_context.py           # Phase 2 add-on
+└── submission/
+    ├── Dhairya_dpm8739_phase1/                 # frozen Apr 24 deliverable
+    └── final_submission/                       # Phase 3 working space
 ```
 
 ## Environment
 
 Docker on Windows, `jupyter/pyspark-notebook` image, scripts run via `spark-submit` from inside the container. No Jupyter, no notebooks — scripts only.
 
+For ad-hoc / single-step development:
+
 ```powershell
 docker run -it --rm -v "${PWD}:/home/jovyan/work" --memory=8g jupyter/pyspark-notebook bash
 cd work
 spark-submit scripts/01_profile_and_clean_postings.py 2>&1 | tee output/logs/01_postings.log
 ```
+
+The full ten-step pipeline (Phase 1 + 2 + add-on + charts) is documented as a one-shot Docker command in `Readme.md` under "How to run" — that is the canonical entry point. Total runtime ~6 min on 8 GB Docker.
 
 - [x] Docker environment setup validated and Spark runtime smoke-tested in-container (`spark-submit --version` and `spark-sql` test query).
 
@@ -167,7 +194,22 @@ Do not implement any of these — they belong to later phases:
 - [x] Script 8 chart generation implemented, 6 PNGs in `output/charts/`.
 - See [PHASE_2_IMPLEMENTATION_PLAN.md](PHASE_2_IMPLEMENTATION_PLAN.md) for the full Phase 2 spec.
 
-## Future Phases (reference only — do not build now)
+## Phase 2 Add-on — Macro Context (BLS JOLTS)
 
+- [x] JOLTS data source (3 BLS time-series files) downloaded to `data/jolts/` (~18 MB raw).
+- [x] Script 09 `09_profile_and_clean_jolts.py` implemented, tested via `spark-submit`, parquet + profile output verified (1,818 monthly rows after filtering to 6 target series).
+- [x] Script 10 `10_analytics_macro_context.py` implemented, tested via `spark-submit`, 2 result CSVs produced (Q4.1 layoff rate, Q4.2 openings vs hires).
+- [x] Script 08 updated with 2 new line charts (Q4.1, Q4.2); total chart count now 8.
+- Adds 25 years of macro hiring context (Dec 2000 - present, monthly) to frame the 2023-2024 cohort comparison.
 
-- **Phase 3 (Presentation + Report, due May 5 / May 7):** Slides and a 5–8 page report covering thesis, data, cleaning decisions, queries, findings, and limitations.
+## Phase 3 — Presentation + Report (in progress)
+
+Due May 5 (in-class symposium) and May 7 (final report PDF).
+
+The complete working space is in `submission/final_submission/`:
+
+- `FINAL_REPORT.md` — 5-8 page report content; converts to the May 7 PDF.
+- `PRESENTATION_OUTLINE.md` — 10-slide deck outline for the May 5 talk.
+- `appendix/A` ... `appendix/E` — thesis revision rationale, methodological confounds, decisions log, per-finding honesty review, and a tiered Phase 3 action-item list with effort estimates.
+
+Phase 3 is intentionally a packaging-and-honesty pass over Phase 2 outputs rather than new analysis: the eight result CSVs and eight chart PNGs in `output/results/` and `output/charts/` are the finished deliverables; the report and slide deck wrap a defensible narrative around them. The single remaining open question — leading the report with the JOLTS reframe rather than the cohort comparison — is tracked in `submission/final_submission/appendix/E_action_items.md` (T1.3).

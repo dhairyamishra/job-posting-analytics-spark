@@ -1,0 +1,21 @@
+company,location,total_laid_off,date,percentage_laid_off,industry,stage,country,company_normalized
+Shutterfly,"Haifa, Non-U.S.",80,2026-04-16,,Manufacturing,Post-IPO,United States,shutterfly
+Snap,Los Angeles,1000,2026-04-15,0.16,Consumer,Post-IPO,United States,snap
+UKG,Boston,950,2026-04-15,,HR,Unknown,United States,ukg
+Productboard,SF Bay Area,,2026-04-15,0.3,Product,Series D,United States,productboard
+Cars.com,Chicago,,2026-04-09,0.11,Transportation,Acquired,United States,cars.com
+Pepper Pay,Miami,,2026-04-09,1.0,Finance,Unknown,United States,pepper pay
+GoPro,SF Bay Area,145,2026-04-07,0.23,Consumer,Post-IPO,United States,gopro
+Pendo,Raleigh,90,2026-04-07,0.1,Product,Series F,United States,pendo
+Bolt,SF Bay Area,,2026-04-05,0.33,Finance,Series E,United States,bolt
+NeuroPixel.AI,"Bengaluru, Non-U.S.",,2026-04-03,1.0,Retail,Seed,India,neuropixel.ai
+Meta,SF Bay Area,200,2026-04-02,,Consumer,Post-IPO,United States,meta
+Oracle,SF Bay Area,30000,2026-03-31,,Other,Post-IPO,United States,oracle
+Monzo,"London, Non-U.S.",50,2026-03-31,,Finance,Series F,United Kingdom,monzo
+Covrzy,"Bengaluru, Non-U.S.",,2026-03-31,1.0,Finance,Seed,India,covrzy
+Rec Room,Seattle,,2026-03-31,1.0,Consumer,Series F,United States,rec room
+Yupp,SF Bay Area,,2026-03-31,1.0,AI,Seed,United States,yupp
+Enpal,"Berlin, Non-U.S.",100,2026-03-27,,Energy,Series E,Germany,enpal
+Monte Carlo,SF Bay Area,,2026-03-26,0.3,Data,Series D,United States,monte carlo
+Quandoo,"Berlin, Non-U.S.",,2026-03-26,1.0,Food,Acquired,Germany,quandoo
+Epic Games,Raleigh,1000,2026-03-24,,Consumer,Unknown,United States,epic games

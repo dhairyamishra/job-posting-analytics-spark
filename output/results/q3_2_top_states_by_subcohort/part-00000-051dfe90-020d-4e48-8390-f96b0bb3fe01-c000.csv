@@ -1,0 +1,21 @@
+subcohort,state,n,pct_of_subcohort
+layoff_affected,ca,697,23.04
+layoff_affected,va,330,10.91
+layoff_affected,wa,270,8.93
+layoff_affected,tx,240,7.93
+layoff_affected,ny,228,7.54
+layoff_affected,united states,132,4.36
+layoff_affected,ma,124,4.10
+layoff_affected,nc,111,3.67
+layoff_affected,il,106,3.50
+layoff_affected,ga,71,2.35
+non_affected,ca,10582,10.00
+non_affected,tx,9886,9.34
+non_affected,fl,5749,5.43
+non_affected,ny,5703,5.39
+non_affected,nc,4783,4.52
+non_affected,il,4304,4.07
+non_affected,pa,4033,3.81
+non_affected,united states,3644,3.44
+non_affected,oh,3354,3.17
+non_affected,ma,3319,3.14

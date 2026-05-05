@@ -353,6 +353,102 @@ def chart_q3_2():
     save_chart("q3_2_top_states_by_subcohort")
 
 
+JOLTS_INDUSTRY_COLORS = {"Information": COLORS["layoff_affected"], "Total Nonfarm": "#6b7280"}
+JOLTS_METRIC_COLORS = {"job_openings_rate": COLORS["layoff_affected"], "hires_rate": COLORS["non_affected"]}
+POSTINGS_WINDOW_START = pd.Timestamp("2023-01-01")
+POSTINGS_WINDOW_END = pd.Timestamp("2024-12-31")
+WINDOW_SHADE_COLOR = "#fbbf24"
+
+
+def chart_q4_1():
+    df = load_result("q4_1_jolts_layoff_rate")
+    if df is None:
+        return
+    df = df.copy()
+    df["obs_date"] = pd.to_datetime(df["obs_date"])
+    df = df.sort_values(["industry", "obs_date"])
+
+    fig, ax = plt.subplots(figsize=(13, 5.5))
+    for industry in ["Total Nonfarm", "Information"]:
+        sub = df[df["industry"] == industry]
+        ax.plot(
+            sub["obs_date"], sub["layoffs_discharges_rate"],
+            label=industry, color=JOLTS_INDUSTRY_COLORS[industry], linewidth=1.5,
+        )
+
+    ax.axvspan(POSTINGS_WINDOW_START, POSTINGS_WINDOW_END, alpha=0.18, color=WINDOW_SHADE_COLOR,
+               label="LinkedIn postings window (2023-2024)")
+
+    info = df[df["industry"] == "Information"]
+    info_window = info[(info["obs_date"] >= POSTINGS_WINDOW_START) & (info["obs_date"] <= POSTINGS_WINDOW_END)]
+    median_window = float(info_window["layoffs_discharges_rate"].median())
+    covid_peak = float(info[info["year"] == 2020]["layoffs_discharges_rate"].max())
+
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Layoffs + discharges rate (%)")
+    ax.grid(axis="y", alpha=0.3)
+    ax.legend(loc="upper right", frameon=False)
+
+    set_header(
+        fig,
+        "Q4.1  Layoffs and discharges rate, 2000-present",
+        "Monthly layoffs + discharges rate, seasonally adjusted (BLS JOLTS).",
+        y_title=0.97, y_subtitle=0.92,
+    )
+    fig.subplots_adjust(top=0.87, bottom=0.15, left=0.07, right=0.97)
+    takeaway = (
+        f"Takeaway: Information-sector layoff rate in 2023-2024 (median {median_window:.1f}%) "
+        f"stayed well below its COVID peak of {covid_peak:.1f}% - the 'tech layoff wave' was concentrated in "
+        f"visible big-name cuts, not a sector-wide surge."
+    )
+    add_footer(fig, takeaway)
+    save_chart("q4_1_jolts_layoff_rate_timeseries")
+
+
+def chart_q4_2():
+    df = load_result("q4_2_jolts_openings_hires_rate")
+    if df is None:
+        return
+    df = df.copy()
+    df["obs_date"] = pd.to_datetime(df["obs_date"])
+    df = df[df["industry"] == "Information"].sort_values("obs_date")
+
+    fig, ax = plt.subplots(figsize=(13, 5.5))
+    ax.plot(df["obs_date"], df["job_openings_rate"],
+            label="Job openings rate", color=JOLTS_METRIC_COLORS["job_openings_rate"], linewidth=1.5)
+    ax.plot(df["obs_date"], df["hires_rate"],
+            label="Hires rate", color=JOLTS_METRIC_COLORS["hires_rate"], linewidth=1.5)
+
+    ax.axvspan(POSTINGS_WINDOW_START, POSTINGS_WINDOW_END, alpha=0.18, color=WINDOW_SHADE_COLOR,
+               label="LinkedIn postings window (2023-2024)")
+
+    peak_2022 = float(df[df["year"] == 2022]["job_openings_rate"].max())
+    window = df[(df["obs_date"] >= POSTINGS_WINDOW_START) & (df["obs_date"] <= POSTINGS_WINDOW_END)]
+    openings_window = float(window["job_openings_rate"].median())
+    hires_window = float(window["hires_rate"].median())
+    openings_drop_pct = 100.0 * (peak_2022 - openings_window) / peak_2022
+
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Rate (%)")
+    ax.grid(axis="y", alpha=0.3)
+    ax.legend(loc="upper right", frameon=False)
+
+    set_header(
+        fig,
+        "Q4.2  Information sector: job openings vs hires rate",
+        "Monthly Information-sector openings and hires rates, seasonally adjusted (BLS JOLTS).",
+        y_title=0.97, y_subtitle=0.92,
+    )
+    fig.subplots_adjust(top=0.87, bottom=0.15, left=0.07, right=0.97)
+    takeaway = (
+        f"Takeaway: Openings peaked at {peak_2022:.1f}% in 2022 and fell to {openings_window:.1f}% in 2023-2024 "
+        f"(down {openings_drop_pct:.0f}%); hires fell to {hires_window:.1f}%. The 2023-2024 shift was a HIRING FREEZE, "
+        f"not a layoff surge."
+    )
+    add_footer(fig, takeaway)
+    save_chart("q4_2_jolts_openings_vs_hires")
+
+
 def main():
     os.makedirs(CHARTS_DIR, exist_ok=True)
     init_sample_sizes()
@@ -363,6 +459,8 @@ def main():
     chart_q2_2()
     chart_q3_1()
     chart_q3_2()
+    chart_q4_1()
+    chart_q4_2()
     print("DONE: all charts regenerated")
 
 

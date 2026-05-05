@@ -1,0 +1,21 @@
+job_id,company_id,company_name,title,location,formatted_work_type,formatted_experience_level,remote_allowed,min_salary,max_salary,med_salary,pay_period,normalized_salary,currency,views,applies,original_listed_time,zip_code,city,state,listed_date,company_normalized
+921716,2774458.0,Corcoran Sawyer Smith,Marketing Coordinator,"Princeton, NJ",Full-time,,false,17.0,20.0,,HOURLY,38480.0,USD,20.0,2.0,1713397508000.0,08540,princeton,nj,2024-04-17,corcoran sawyer smith
+1829192,,,Mental Health Therapist/Counselor,"Fort Collins, CO",Full-time,,false,30.0,50.0,,HOURLY,83200.0,USD,1.0,,1712857887000.0,80521,fort collins,co,2024-04-11,
+10998357,64896719.0,The National Exemplar,Assitant Restaurant Manager,"Cincinnati, OH",Full-time,,false,45000.0,65000.0,,YEARLY,55000.0,USD,8.0,,1713277614000.0,45202,cincinnati,oh,2024-04-16,the national exemplar
+23221523,766262.0,"Abrams Fensterman, LLP",Senior Elder Law / Trusts and Estates Associate Attorney,"New Hyde Park, NY",Full-time,,false,140000.0,175000.0,,YEARLY,157500.0,USD,16.0,,1712895812000.0,11040,new hyde park,ny,2024-04-12,"abrams fensterman, llp"
+35982263,,,Service Technician,"Burlington, IA",Full-time,,false,60000.0,80000.0,,YEARLY,70000.0,USD,3.0,,1713451943000.0,52601,burlington,ia,2024-04-18,
+91700727,1481176.0,Downtown Raleigh Alliance,Economic Development and Planning Intern,"Raleigh, NC",Internship,,false,14.0,20.0,,HOURLY,35360.0,USD,9.0,4.0,1713456099000.0,27601,raleigh,nc,2024-04-18,downtown raleigh alliance
+103254301,81942316.0,Raw Cereal,Producer,United States,Contract,,true,60000.0,300000.0,,YEARLY,180000.0,USD,7.0,1.0,1712861019000.0,,united states,,2024-04-11,raw cereal
+112576855,,,Building Engineer,"San Francisco, CA",Full-time,,false,90000.0,120000.0,,YEARLY,105000.0,USD,2.0,,1712443452000.0,94101,san francisco,ca,2024-04-06,
+1218575,721189.0,Children's Nebraska,Respiratory Therapist,"Omaha, NE",Full-time,,false,,,,,,,3.0,,1712348500000.0,68102,omaha,ne,2024-04-05,children's nebraska
+9615617,1194336.0,"Glastender, Inc.",Inside Customer Service Associate,"Saginaw, MI",Full-time,,false,,,,,,,4.0,1.0,1713210566000.0,48601,saginaw,mi,2024-04-15,"glastender,"
+11009123,93456.0,PGAV Destinations,Project Architect,"St Louis, MO",Full-time,,false,,,,,,,2.0,,1712858322000.0,63367,st louis,mo,2024-04-11,pgav destinations
+56482768,,,Appalachian Highlands Women's Business Center,"Kingsport, TN",Full-time,,false,,,,,,,2.0,,1712870267000.0,37660,kingsport,tn,2024-04-11,
+56924323,,,Structural Engineer,"San Mateo, CA",Full-time,,false,,,,,,,2.0,,1712460580000.0,94401,san mateo,ca,2024-04-07,
+69333422,27097933.0,Staffing Theory,Senior Product Marketing Manager,United States,Full-time,,true,,,,,,,2.0,,1713537397000.0,,united states,,2024-04-19,staffing theory
+83789755,3810432.0,OsteoStrong,Osteogenic Loading Coach,"Anchorage, AK",Full-time,,false,,,,,,,4.0,,1713466434000.0,99501,anchorage,ak,2024-04-18,osteostrong
+95428182,55624331.0,CLEVELAND KIDS BOOK BANK,Administrative Coordinator,"Cleveland, OH",Full-time,,false,,,25.0,HOURLY,52000.0,USD,1.0,,1712855686000.0,44102,cleveland,oh,2024-04-11,cleveland kids book bank
+103860943,,,Customer Service / Reservationist,"Providence, RI",Part-time,,false,18.0,19.0,,HOURLY,38480.0,USD,3.0,,1713532302000.0,02903,providence,ri,2024-04-19,
+111513530,4028816.0,United Methodists of Greater New Jersey,"Content Writer, Communications",Greater Philadelphia,Full-time,,false,,,,,,,10.0,1.0,1713457320000.0,,greater philadelphia,,2024-04-18,united methodists of greater new jersey
+115639136,988555.0,Shannon Waltchack,Controller,"Birmingham, AL",Full-time,,false,,,,,,,61.0,4.0,1713209850000.0,35203,birmingham,al,2024-04-15,shannon waltchack
+117675818,4285947.0,Premier Family Clinic,Physician Assistant,"Atlanta, GA",Contract,,false,,,,,,,29.0,1.0,1712667107000.0,30303,atlanta,ga,2024-04-09,premier family clinic
