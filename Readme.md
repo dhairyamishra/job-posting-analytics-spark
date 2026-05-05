@@ -141,11 +141,124 @@ flowchart LR
 ### Prerequisites
 
 1. **Docker Desktop** running, with at least 8 GB RAM allocated to the Linux engine. No host-side Python or Spark install is required — everything runs inside the `jupyter/pyspark-notebook` image.
-2. **Datasets** placed under `data/` exactly as in the structure above. None are committed to git.
+2. **Datasets** populated under `data/` as described in [Downloading the data](#downloading-the-data) below. None are committed to git.
 
-   - `data/linkedin/postings.csv`, `data/linkedin/jobs/job_skills.csv`, `data/linkedin/mappings/skills.csv` from the Kaggle dataset [`arshkon/linkedin-job-postings`](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings).
-   - `data/layoffs/layoffs.csv` from the Kaggle dataset [`swaptr/layoffs-2022`](https://www.kaggle.com/datasets/swaptr/layoffs-2022).
-   - `data/jolts/jt.data.2.JobOpenings`, `data/jolts/jt.data.3.Hires`, `data/jolts/jt.data.6.LayoffsDischarges`, `data/jolts/jt.industry` from BLS at [download.bls.gov/pub/time.series/jt/](https://download.bls.gov/pub/time.series/jt/) (one `curl`/`Invoke-WebRequest` per file).
+### Downloading the data
+
+None of the raw inputs are committed to git. After cloning, populate `data/` so it matches the layout in the project tree above.
+
+The pipeline reads exactly **7 files** across **3 sources**:
+
+```
+data/
+├── linkedin/
+│   ├── postings.csv                          ~493 MB   Kaggle (account required)
+│   ├── jobs/job_skills.csv                   ~3.5 MB   Kaggle (account required)
+│   └── mappings/skills.csv                   <1 KB     Kaggle (account required)
+├── layoffs/
+│   └── layoffs.csv                           ~744 KB   Kaggle (account required)
+└── jolts/
+    ├── jt.data.2.JobOpenings                 ~6 MB     BLS (public domain)
+    ├── jt.data.3.Hires                       ~6 MB     BLS (public domain)
+    └── jt.data.6.LayoffsDischarges           ~6 MB     BLS (public domain)
+```
+
+#### 1. JOLTS (BLS, no account needed)
+
+Public-domain US government data. BLS rejects unidentified clients, so requests must carry a `User-Agent` header that includes a real contact email.
+
+PowerShell:
+
+```powershell
+mkdir -Force data/jolts | Out-Null
+$ua = "job-posting-analytics-spark (your-email@example.com)"
+foreach ($f in @("jt.data.2.JobOpenings","jt.data.3.Hires","jt.data.6.LayoffsDischarges")) {
+  Invoke-WebRequest -Uri "https://download.bls.gov/pub/time.series/jt/$f" `
+    -OutFile "data/jolts/$f" `
+    -UserAgent $ua
+}
+```
+
+bash / zsh:
+
+```bash
+mkdir -p data/jolts
+UA="job-posting-analytics-spark (your-email@example.com)"
+for f in jt.data.2.JobOpenings jt.data.3.Hires jt.data.6.LayoffsDischarges; do
+  curl -A "$UA" -o "data/jolts/$f" "https://download.bls.gov/pub/time.series/jt/$f"
+done
+```
+
+Replace `your-email@example.com` with a real address.
+
+#### 2. LinkedIn job postings (Kaggle)
+
+Source: [`arshkon/linkedin-job-postings`](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings) (~520 MB zipped).
+
+**Option A - Kaggle CLI (recommended).**
+
+1. `pip install kaggle`
+2. Sign in at [kaggle.com](https://www.kaggle.com) -> *Account -> Settings -> API -> Create New Token*. Save `kaggle.json` to `~/.kaggle/kaggle.json` (Linux/macOS) or `C:\Users\<you>\.kaggle\kaggle.json` (Windows).
+3. From the project root:
+
+```bash
+kaggle datasets download -d arshkon/linkedin-job-postings -p data/linkedin --unzip
+```
+
+The Kaggle bundle expands a wider tree than this project uses. Only `postings.csv`, `jobs/job_skills.csv`, and `mappings/skills.csv` are read by the pipeline; the rest can stay or be deleted.
+
+**Option B - Browser.** Download the zip from the dataset page, extract, and place the three files at:
+
+- `data/linkedin/postings.csv`
+- `data/linkedin/jobs/job_skills.csv`
+- `data/linkedin/mappings/skills.csv`
+
+#### 3. Layoffs (Kaggle)
+
+Source: [`swaptr/layoffs-2022`](https://www.kaggle.com/datasets/swaptr/layoffs-2022) (~750 KB).
+
+**Option A - Kaggle CLI.**
+
+```bash
+kaggle datasets download -d swaptr/layoffs-2022 -p data/layoffs --unzip
+```
+
+**Option B - Browser.** Download, extract, and place `layoffs.csv` at `data/layoffs/layoffs.csv`.
+
+#### Verifying the layout
+
+A quick sanity check before kicking off the pipeline.
+
+PowerShell:
+
+```powershell
+@(
+  "data/linkedin/postings.csv",
+  "data/linkedin/jobs/job_skills.csv",
+  "data/linkedin/mappings/skills.csv",
+  "data/layoffs/layoffs.csv",
+  "data/jolts/jt.data.2.JobOpenings",
+  "data/jolts/jt.data.3.Hires",
+  "data/jolts/jt.data.6.LayoffsDischarges"
+) | ForEach-Object { "{0,-50} {1}" -f $_, $(if (Test-Path $_) { "OK" } else { "MISSING" }) }
+```
+
+bash:
+
+```bash
+for f in \
+  data/linkedin/postings.csv \
+  data/linkedin/jobs/job_skills.csv \
+  data/linkedin/mappings/skills.csv \
+  data/layoffs/layoffs.csv \
+  data/jolts/jt.data.2.JobOpenings \
+  data/jolts/jt.data.3.Hires \
+  data/jolts/jt.data.6.LayoffsDischarges; do
+  [ -f "$f" ] && echo "OK       $f" || echo "MISSING  $f"
+done
+```
+
+All seven should report `OK` before running `01_profile_and_clean_postings.py`.
 
 ### One-shot pipeline (PowerShell)
 
