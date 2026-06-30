@@ -447,3 +447,36 @@ The `submission/Dhairya_dpm8739_phase1/` folder is the **frozen** Phase 1 ingest
 See `IMPLEMENTATION_PLAN.md` for the chronological build record — every phase has checkboxes marking completion, and per-phase subsections document the decisions made. `PHASE_2_IMPLEMENTATION_PLAN.md` is the locked spec for the six core analytics queries.
 
 Built over a focused multi-day sprint, with deliberate stop-points to gate further work on evidence (e.g., Step 0 diagnostic before committing to Phase 2 analytics scripts, JOLTS integrity check before trusting its takeaways).
+
+## Verified Repository Notes
+
+Reviewed on 2026-06-30.
+
+Primary executable scripts currently present at the repository root:
+
+| Script | Purpose |
+|---|---|
+| `scripts/01_profile_and_clean_postings.py` | Profile and clean LinkedIn postings. |
+| `scripts/02_profile_and_clean_skills.py` | Profile and clean job skill tags. |
+| `scripts/03_profile_and_clean_layoffs.py` | Profile and clean layoffs data. |
+| `scripts/04_diagnostic_join_check.py` | Validate join assumptions before analytics. |
+| `scripts/05_analytics_salary_level.py` | Salary and experience-level cohort analysis. |
+| `scripts/06_analytics_skills_pivot.py` | Skill mix and tech-skill analysis. |
+| `scripts/07_analytics_geo_remote.py` | Geographic and remote-work analysis. |
+| `scripts/08_make_charts.py` | Generate static chart PNGs. |
+| `scripts/09_profile_and_clean_jolts.py` | Profile and clean BLS JOLTS macro data. |
+| `scripts/10_analytics_macro_context.py` | Build macro-context outputs from JOLTS. |
+
+Current top-level output/report locations:
+
+| Path | Purpose |
+|---|---|
+| `FinalSubmission/` | Current final-submission workspace with scripts and charts. |
+| `submission/FinalSubmission/` | Additional final-submission copy under `submission/`. |
+| `archive/` | Archived phase/final submission materials. |
+| `output/` | Generated Spark outputs and charts. |
+| `data/` | Local input datasets and cleaned intermediate data. |
+
+The working tree currently contains pre-existing submission/archive churn outside
+this README. When updating documentation, stage `Readme.md` explicitly so those
+unrelated changes are not committed accidentally.
